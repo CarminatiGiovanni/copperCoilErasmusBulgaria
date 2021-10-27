@@ -81,21 +81,21 @@ void loop()
                 if(layer == 0){ //SMOOOTH ACCELLERATION
                   
 
-                  for (int i = 0; i < 400; i++) {
+                  for (int i = 0; i < 400; i++) { //1 turn revolutionTime = delayServo * 2 * 400 * (g / 8)
                       digitalWrite(DIRSERVO, LOW);
                       digitalWrite(ENASERVO, HIGH);
                       digitalWrite(PULSERVO, HIGH);
-                      delayMicroseconds(delayServo * int(g / 32));
+                      delayMicroseconds(delayServo * int(g / 8));
                       digitalWrite(PULSERVO, LOW);
-                      delayMicroseconds(delayServo* int(g / 32));
+                      delayMicroseconds(delayServo* int(g / 8));
                     }
 
                   for (int i = 0; i < 5; i++) { //0.026 mm
                     digitalWrite(DIRSTEP, LOW); //DX
                     digitalWrite(PULSTEP, HIGH);
-                    delayMicroseconds(delayStep* int(g / 32));
+                    delayMicroseconds(delayStep* int(g / 8));
                     digitalWrite(PULSTEP, LOW);
-                    delayMicroseconds(delayStep* int(g / 32));
+                    delayMicroseconds(delayStep* int(g / 8));
                   }
                 }
 
