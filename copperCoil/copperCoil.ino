@@ -57,7 +57,7 @@ void loop()
     lastDebounceTime = millis();
   }
 
-  if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) {
+  if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) { //IF debounceDelay has passed
     if (reading != buttonState) {
       buttonState = reading;
       if (buttonState == HIGH) {
