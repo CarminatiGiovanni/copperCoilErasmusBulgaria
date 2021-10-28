@@ -1,54 +1,45 @@
-int HOME = 9;
-int BUTTON = 8;
-int DIRSTEP = 7;
-int PULSTEP = 6;
-int PULSERVO = 5; //define Pulse pin
-int DIRSERVO = 4; //define Direction pin
-int ENASERVO = 3; //define Enable Pin
+#define HOME  9 //pin sensor home
+#define BUTTON  8 //pin start button
+#define DIRSTEP 7 //pin for stepper for the Direction
+#define PULSTEP  6 //pin for the stepper pulse
+#define PULSERVO 5 //pin for servo pulse
+#define DIRSERVO  4 //pin for servo Direction
+//#define ENASERVO 3 //define Enable Pin delayServo
+
+const int delayServo = 9;
+const int delayStep = 50;
+const unsigned long debounceDelay = 30;
+
+const int coilStarterPosition = 1530;
+
 int val = 0;
 int buttonState;
 int lastButtonState = LOW;
-const int delayServo = 9;
-const int delayStep = 50;
 unsigned long lastDebounceTime = 0;
-unsigned long debounceDelay = 30;
 
-void pulseOutStep(bool dir,int delayMicroseconds){
-  
+void pulseOutStep(bool dir,int delayMicro){
+  digitalWrite(DIRSTEP, dir);
+  digitalWrite(PULSTEP, HIGH);
+  delayMicroseconds(delayMicro);
+  digitalWrite(PULSTEP, LOW);
+  delayMicroseconds(delayMicro);
 }
 
 void setup() {
+  
+  pinMode(DIRSTEP, OUTPUT);
+  pinMode(PULSTEP, OUTPUT);
+  pinMode(PULSERVO, OUTPUT);
+  pinMode(DIRSERVO, OUTPUT);
+  pinMode(ENASERVO, OUTPUT);
+  pinMode(HOME, INPUT);
+  pinMode(BUTTON, INPUT);
+
+  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); //move the stepper back to point 0
+  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); //starter position for the coil
+      
+
   {
-    pinMode(DIRSTEP, OUTPUT);
-    pinMode(PULSTEP, OUTPUT);
-    pinMode(PULSERVO, OUTPUT);
-    pinMode(DIRSERVO, OUTPUT);
-    pinMode(ENASERVO, OUTPUT);
-    pinMode(HOME, INPUT);
-    pinMode(BUTTON, INPUT);
-  } {
-    for (int i = 0; i < 30000; i++) {
-      val = digitalRead(HOME);
-      if (val == LOW)
-
-      {
-        digitalWrite(DIRSTEP, HIGH);
-        digitalWrite(PULSTEP, HIGH);
-        delay(1);
-        digitalWrite(PULSTEP, LOW);
-        delay(1);
-      }
-    }
-  } {
-    for (int i = 0; i < 1530; i++) { //starter position for the coil
-      digitalWrite(DIRSTEP, LOW);
-      digitalWrite(PULSTEP, HIGH);
-      delay(1);
-      digitalWrite(PULSTEP, LOW);
-      delay(1);
-    }
-
-  } {
     for (int i = 0; i < 400; i++) { //400 servo revolution (bottom)
       digitalWrite(DIRSERVO, HIGH);
       digitalWrite(ENASERVO, HIGH);
