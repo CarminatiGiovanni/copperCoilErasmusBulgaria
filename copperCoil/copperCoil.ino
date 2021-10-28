@@ -14,8 +14,8 @@ const int coilStarterPosition = 1530;
 const int servoRotation = 400;
 
 int val = 0;
-int buttonState;
-int lastButtonState = LOW;
+//int buttonState;
+bool lastButtonState = LOW;
 unsigned long lastDebounceTime = 0;
 
 void pulseOutStep(bool dir,int delayMicro){
@@ -49,20 +49,21 @@ void setup() {
   for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
   for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
 }
-void loop()
 
+
+
+
+void loop()
 {
   int reading = digitalRead(BUTTON);
-  if (reading != lastButtonState) {
-    lastDebounceTime = millis();
-  }
+  if (reading != lastButtonState) lastDebounceTime = millis();
 
   if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) { //IF debounceDelay has passed
-    if (reading != buttonState) {
-      buttonState = reading;
-      if (buttonState == HIGH) {
-        {
-          for (int layer = 0; layer < 34; layer++) //layers number = (x4)
+    //if (reading != buttonState) {
+    //  buttonState = reading;
+    // if (buttonState == HIGH) {
+        { //FIXME: set layer to 34
+          for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
           {
             //RIGHT
             {
@@ -164,8 +165,14 @@ void loop()
           }
         }
 
-      }
+      //}
+
+      
+  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
+  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
+  for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
+
+
     }
-  }
   lastButtonState = reading;
 }
