@@ -74,92 +74,31 @@ void loop()
                   for (int i = 0; i < 5; i++) pulseOutStep(LOW, delayStep*int(g/8)); //0.026 mm
                 }
 
-                else{
-                    {
-                    for (int i = 0; i < servoRotation; i++) {
-                      digitalWrite(DIRSERVO, LOW);
-                      digitalWrite(ENASERVO, HIGH);
-                      digitalWrite(PULSERVO, HIGH);
-                      delayMicroseconds(9);
-                      digitalWrite(PULSERVO, LOW);
-                      delayMicroseconds(9);
-                    }
-                  }
-                  for (int i = 0; i < 5; i++) { //0.026 mm
-                    digitalWrite(DIRSTEP, LOW); //DX
-                    digitalWrite(PULSTEP, HIGH);
-                    delayMicroseconds(50);
-                    digitalWrite(PULSTEP, LOW);
-                    delayMicroseconds(50);
-                  }
-
+                else{   
+                  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
+                  for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
                 }
               }
             }
             //LEFT
             {
               for (int i = 0; i < 436; i++) {
-                {
-                  for (int i = 0; i < servoRotation; i++) {
-                    digitalWrite(DIRSERVO, LOW);
-                    digitalWrite(ENASERVO, HIGH);
-                    digitalWrite(PULSERVO, HIGH);
-                    delayMicroseconds(9);
-                    digitalWrite(PULSERVO, LOW);
-                    delayMicroseconds(9);
-                  }
-                }
-                for (int i = 0; i < 5; i++) {
-                  digitalWrite(DIRSTEP, HIGH); //SX
-                  digitalWrite(PULSTEP, HIGH);
-                  delayMicroseconds(50);
-                  digitalWrite(PULSTEP, LOW);
-                  delayMicroseconds(50);
-                }
+                  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
+                  for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
               }
             }
             //RIGHT
             {
               for (int i = 0; i < 436; i++) {
-                {
-                  for (int i = 0; i < servoRotation; i++) {
-                    digitalWrite(DIRSERVO, LOW);
-                    digitalWrite(ENASERVO, HIGH);
-                    digitalWrite(PULSERVO, HIGH);
-                    delayMicroseconds(9);
-                    digitalWrite(PULSERVO, LOW);
-                    delayMicroseconds(9);
-                  }
-                }
-                for (int i = 0; i < 5; i++) {
-                  digitalWrite(DIRSTEP, LOW);
-                  digitalWrite(PULSTEP, HIGH);
-                  delayMicroseconds(50);
-                  digitalWrite(PULSTEP, LOW);
-                  delayMicroseconds(50);
-                }
+                for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
+                for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
               }
             }
             //LEFT + 1 TURN
             {
               for (int i = 0; i < 437; i++) {
-                {
-                  for (int i = 0; i < servoRotation; i++) {
-                    digitalWrite(DIRSERVO, LOW);
-                    digitalWrite(ENASERVO, HIGH);
-                    digitalWrite(PULSERVO, HIGH);
-                    delayMicroseconds(9);
-                    digitalWrite(PULSERVO, LOW);
-                    delayMicroseconds(9);
-                  }
-                }
-                for (int i = 0; i < 5; i++) {
-                  digitalWrite(DIRSTEP, HIGH);
-                  digitalWrite(PULSTEP, HIGH);
-                  delayMicroseconds(50);
-                  digitalWrite(PULSTEP, LOW);
-                  delayMicroseconds(50);
-                }
+                for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
+                for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
               }
             }
           }
