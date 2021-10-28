@@ -4,14 +4,14 @@
 #define PULSTEP  6 //pin for the stepper pulse
 #define PULSERVO 5 //pin for servo pulse
 #define DIRSERVO  4 //pin for servo Direction
-//#define ENASERVO 3 //define Enable Pin delayServo
+#define ENASERVO 3 //define Enable Pin delayServo
 
 const int delayServo = 9;
 const int delayStep = 50;
 const unsigned long debounceDelay = 30;
 
 const int coilStarterPosition = 1530;
-const servoRotation = 400;
+const int servoRotation = 400;
 
 int val = 0;
 int buttonState;
@@ -70,7 +70,7 @@ void loop()
 
                 if(layer == 0){ //SMOOOTH ACCELLERATION
                   for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo*int(g / 8));//1 turn revolutionTime = delayServo * 2 * servoRotation * (g / 8)
-                  for (int i = 0; i < 5; i++) pulseOutStep(LOW, delayStep*int(g/8)) //0.026 mm
+                  for (int i = 0; i < 5; i++) pulseOutStep(LOW, delayStep*int(g/8)); //0.026 mm
                 }
 
                 else{
