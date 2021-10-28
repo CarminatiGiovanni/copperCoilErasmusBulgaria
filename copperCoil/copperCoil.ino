@@ -11,6 +11,7 @@ const int delayStep = 50;
 const unsigned long debounceDelay = 30;
 
 const int coilStarterPosition = 1530;
+const servoRotation = 400;
 
 int val = 0;
 int buttonState;
@@ -25,6 +26,15 @@ void pulseOutStep(bool dir,int delayMicro){
   delayMicroseconds(delayMicro);
 }
 
+void pulseOutServo(bool dir,int delayMicro){
+  digitalWrite(DIRSERVO, dir);
+  digitalWrite(ENASERVO, HIGH);
+  digitalWrite(PULSERVO, HIGH);
+  delayMicroseconds(delayMicro);
+  digitalWrite(PULSERVO, LOW);
+  delayMicroseconds(delayMicro);
+}
+
 void setup() {
   
   pinMode(DIRSTEP, OUTPUT);
@@ -35,20 +45,9 @@ void setup() {
   pinMode(HOME, INPUT);
   pinMode(BUTTON, INPUT);
 
-  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); //move the stepper back to point 0
-  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); //starter position for the coil
-      
-
-  {
-    for (int i = 0; i < 400; i++) { //400 servo revolution (bottom)
-      digitalWrite(DIRSERVO, HIGH);
-      digitalWrite(ENASERVO, HIGH);
-      digitalWrite(PULSERVO, HIGH);
-      delayMicroseconds(1000);
-      digitalWrite(PULSERVO, LOW);
-      delayMicroseconds(1000);
-    }
-  }
+  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
+  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
+  for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
 }
 void loop()
 
