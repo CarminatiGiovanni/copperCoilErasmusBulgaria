@@ -13,6 +13,10 @@ const int delayStep = 50;
 unsigned long lastDebounceTime = 0;
 unsigned long debounceDelay = 30;
 
+void pulseOutStep(bool dir,int delayMicroseconds){
+  
+}
+
 void setup() {
   {
     pinMode(DIRSTEP, OUTPUT);
