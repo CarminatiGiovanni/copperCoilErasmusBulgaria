@@ -71,7 +71,7 @@ void loop()
           {
             //RIGHT
             {
-              for (int g = 436; g > 0; g--) { //layer length
+              for (int g = 444; g > 8; g--) { //layer length
 
                 if(layer == 0){ //SMOOOTH ACCELLERATION
                   
