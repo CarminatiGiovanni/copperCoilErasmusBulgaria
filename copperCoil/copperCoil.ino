@@ -10,18 +10,17 @@ const int SERVO_DELAY = 9;
 const int STEPPER_DELAY = 50;
 const int STEPPER_HORIZONTAL_MOVE = 5;
 const int GRADUAL_ACCELERATION_INDEX = 8;
-const unsigned long debounceDelay = 30;
+const unsigned long DEBOUNCE_DELAY = 30;
 
 const int COIL_STARTER_POSITION = 1530;
 const int SERVO_ROTATION = 400;
 const int LAYER_TURNS = 436;
-const int COIL_LAYERS = 2; // change to 34 * 4
+const int COIL_LAYERS = 4; // change to 34 * 4
 
 int val = 0;
-//int buttonState;
 bool lastButtonState = LOW;
 unsigned long lastDebounceTime = 0;
-bool RL = LOW; //  stepper motor direction,  HIGH = right | LOW = left
+bool LR = LOW; //  stepper motor direction,  HIGH = right | LOW = left
 
 void setup() {
   
@@ -36,62 +35,13 @@ void setup() {
   starterPosition();
 }
 
-
-
-
 void loop()
 {
   int reading = digitalRead(BUTTON);
   if (reading != lastButtonState) lastDebounceTime = millis();
 
-  if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) { //IF debounceDelay has passed
-    //if (reading != buttonState) {
-    //  buttonState = reading;
-    // if (buttonState == HIGH) {
-        // { //FIXME: set layer to 34
-        //   for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
-        //   {
-        //     //RIGHT
-        //     {
-        //       for (int g = 444; g > 8; g--) { //layer length
-
-        //         if(layer == 0){ //SMOOOTH ACCELLERATION
-        //           for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,SERVO_DELAY*int(g / 8));//1 turn revolutionTime = SERVO_DELAY * 2 * servoRotation * (g / 8)
-        //           for (int i = 0; i < 5; i++) pulseOutStep(LOW, STEPPER_DELAY*int(g/8)); //0.026 mm
-        //         }
-
-        //         else{   
-        //           rotateServo();
-        //           for (int i = 0; i < 5; i++) pulseOutStep(LOW,STEPPER_DELAY); //0.026 mm
-        //         }
-        //       }
-        //     }
-        //     //LEFT
-        //     {
-        //       for (int i = 0; i < 436; i++) {
-        //           rotateServo();
-        //           for (int i = 0; i < 5; i++) pulseOutStep(HIGH,STEPPER_DELAY); //0.026 mm
-        //       }
-        //     }
-        //     //RIGHT
-        //     {
-        //       for (int i = 0; i < 436; i++) {
-        //         rotateServo();
-        //         for (int i = 0; i < 5; i++) pulseOutStep(LOW,STEPPER_DELAY); //0.026 mm
-        //       }
-        //     }
-        //     //LEFT + 1 TURN
-        //     {
-        //       for (int i = 0; i < 437; i++) {
-        //         rotateServo();
-        //         for (int i = 0; i < 5; i++) pulseOutStep(HIGH,STEPPER_DELAY); //0.026 mm
-        //       }
-        //     }
-        //   }
-        // }
-
-      //}
-    
+  if ((unsigned long)(millis() - lastDebounceTime) > DEBOUNCE_DELAY) { //IF DEBOUNCE_DELAY has passed
+   
     LR = LOW; //first go on right
     int speedModifier = 1;
     int layerTurnsModifier = 0;
@@ -103,58 +53,15 @@ void loop()
       for(int turn = 0; turn < LAYER_TURNS + layerTurnsModifier; turn++){
 
         if(layer == 0){
-          speedModifier = int((LAYER_TURNS - turn) / GRADUAL_ACCELERATION_INDEX)
+          speedModifier = int((LAYER_TURNS - turn) / GRADUAL_ACCELERATION_INDEX);
           if(speedModifier == 0) speedModifier = 1;
         } else speedModifier = 1;
 
         rotateServo(SERVO_DELAY * speedModifier);
-        moveStepper(LR,stepMove, STEPPER_DELAY * speedModifier);
+        moveStepper(LR, STEPPER_DELAY * speedModifier);
         LR = !LR;
       }
     }
-
-
-    for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
-          {
-            //RIGHT
-            {
-              for (int g = 444; g > 8; g--) { //layer length
-
-                if(layer == 0){ //SMOOOTH ACCELLERATION
-                  //1 turn revolutionTime = SERVO_DELAY * 2 * servoRotation * (g / 8)
-                  rotateServo(SERVO_DELAY * int(g/8));
-                   moveStepper(LOW,stepMove, STEPPER_DELAY*int(g/8));
-                }
-
-                else{   
-                  rotateServo(SERVO_DELAY);
-                  moveStepper(LOW,stepMove,STEPPER_DELAY);
-                }
-              }
-            }
-            //LEFT
-            {
-              for (int i = 0; i < 436; i++) {
-                  rotateServo(SERVO_DELAY);
-                  moveStepper(HIGH,stepMove,STEPPER_DELAY);
-              }
-            }
-            //RIGHT
-            {
-              for (int i = 0; i < 436; i++) {
-                rotateServo(SERVO_DELAY);
-                moveStepper(LOW,stepMove,STEPPER_DELAY);
-              }
-            }
-            //LEFT + 1 TURN
-            {
-              for (int i = 0; i < 437; i++) {
-                rotateServo(SERVO_DELAY);
-                moveStepper(HIGH,stepMove,STEPPER_DELAY);
-              }
-            }
-        }
-      
      starterPosition();
   }
   lastButtonState = reading;
@@ -178,8 +85,8 @@ void pulseOutServo(bool dir,int delayMicro){
   delayMicroseconds(delayMicro);
 }
 
-void rotateServo(){
-  for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(LOW,SERVO_DELAY);
+void rotateServo(int delays){
+  for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(LOW,delays);
 }
 
 void moveStepper(bool dir,int delays){
@@ -188,7 +95,6 @@ void moveStepper(bool dir,int delays){
 
 void starterPosition(){
   while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
-      for (int i = 0; i < COIL_STARTER_POSITION; i++) pulseOutStep(LOW,1000); // starter position for the coil
-      for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
-    }
+  for (int i = 0; i < COIL_STARTER_POSITION; i++) pulseOutStep(LOW,1000); // starter position for the coil
+  for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
 }
