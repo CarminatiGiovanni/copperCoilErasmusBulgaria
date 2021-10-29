@@ -1,9 +1,10 @@
 #include "header.h"
 
-int val = 0;
-bool lastButtonState = LOW;
-unsigned long lastDebounceTime = 0;
+bool lastButtonState = LOW; //old button state
+bool reading = LOW, // read the value of the button
+unsigned long lastDebounceTime = 0; // last time the button has been pressed
 bool LR = LOW; //  stepper motor direction,  HIGH = right | LOW = left
+unsigned long timeNow = 0; //used for the millis
 
 void setup() {
   
@@ -15,16 +16,19 @@ void setup() {
   pinMode(HOME, INPUT);
   pinMode(BUTTON, INPUT);
 
-  starterPosition();
+  starterPosition();  //more details in functions.h
 }
 
 void loop()
 {
-  int reading = digitalRead(BUTTON);
-  if (reading != lastButtonState) lastDebounceTime = millis();
+  reading = digitalRead(BUTTON);  // read the button to start
+  if (reading != lastButtonState) lastDebounceTime = millis(); // if the button change state the lastDebounceTime is resetted
+  timeNow = millis();
 
-  if ((unsigned long)(millis() - lastDebounceTime) > DEBOUNCE_DELAY) { //IF DEBOUNCE_DELAY has passed
-   
+  //18446744073709551615 is the maximum number for unsigned long, then millis() restart from 0
+  //FIXME: the autonomy of the program is about 50days, then it gets stuck without restarting
+
+  if (timeNow - lastDebounceTime) > DEBOUNCE_DELAY) { //IF DEBOUNCE_DELAY has passed
     LR = LOW; //first go on right
     int speedModifier = 1;
     int layerTurnsModifier = 0;
