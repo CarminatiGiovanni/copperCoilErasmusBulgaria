@@ -18,6 +18,123 @@ int val = 0;
 bool lastButtonState = LOW;
 unsigned long lastDebounceTime = 0;
 
+void setup() {
+  
+  pinMode(DIRSTEP, OUTPUT);
+  pinMode(PULSTEP, OUTPUT);
+  pinMode(PULSERVO, OUTPUT);
+  pinMode(DIRSERVO, OUTPUT);
+  pinMode(ENASERVO, OUTPUT);
+  pinMode(HOME, INPUT);
+  pinMode(BUTTON, INPUT);
+
+  starterPosition();
+}
+
+
+
+
+void loop()
+{
+  int reading = digitalRead(BUTTON);
+  if (reading != lastButtonState) lastDebounceTime = millis();
+
+  if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) { //IF debounceDelay has passed
+    //if (reading != buttonState) {
+    //  buttonState = reading;
+    // if (buttonState == HIGH) {
+        // { //FIXME: set layer to 34
+        //   for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
+        //   {
+        //     //RIGHT
+        //     {
+        //       for (int g = 444; g > 8; g--) { //layer length
+
+        //         if(layer == 0){ //SMOOOTH ACCELLERATION
+        //           for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo*int(g / 8));//1 turn revolutionTime = delayServo * 2 * servoRotation * (g / 8)
+        //           for (int i = 0; i < 5; i++) pulseOutStep(LOW, delayStep*int(g/8)); //0.026 mm
+        //         }
+
+        //         else{   
+        //           rotateServo();
+        //           for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
+        //         }
+        //       }
+        //     }
+        //     //LEFT
+        //     {
+        //       for (int i = 0; i < 436; i++) {
+        //           rotateServo();
+        //           for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
+        //       }
+        //     }
+        //     //RIGHT
+        //     {
+        //       for (int i = 0; i < 436; i++) {
+        //         rotateServo();
+        //         for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
+        //       }
+        //     }
+        //     //LEFT + 1 TURN
+        //     {
+        //       for (int i = 0; i < 437; i++) {
+        //         rotateServo();
+        //         for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
+        //       }
+        //     }
+        //   }
+        // }
+
+      //}
+
+
+    for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
+          {
+            //RIGHT
+            {
+              for (int g = 444; g > 8; g--) { //layer length
+
+                if(layer == 0){ //SMOOOTH ACCELLERATION
+                  //1 turn revolutionTime = delayServo * 2 * servoRotation * (g / 8)
+                  rotateServo(delayServo * int(g/8));
+                   moveStepper(LOW,stepMove, delayStep*int(g/8));
+                }
+
+                else{   
+                  rotateServo(delayServo);
+                  moveStepper(LOW,stepMove,delayStep);
+                }
+              }
+            }
+            //LEFT
+            {
+              for (int i = 0; i < 436; i++) {
+                  rotateServo(delayServo);
+                  moveStepper(HIGH,stepMove,delayStep);
+              }
+            }
+            //RIGHT
+            {
+              for (int i = 0; i < 436; i++) {
+                rotateServo(delayServo);
+                moveStepper(LOW,stepMove,delayStep);
+              }
+            }
+            //LEFT + 1 TURN
+            {
+              for (int i = 0; i < 437; i++) {
+                rotateServo(delayServo);
+                moveStepper(HIGH,stepMove,delayStep);
+              }
+            }
+        }
+      
+     starterPosition();
+  }
+  lastButtonState = reading;
+}
+
+
 void pulseOutStep(bool dir,int delayMicro){
   digitalWrite(DIRSTEP, dir);
   digitalWrite(PULSTEP, HIGH);
@@ -35,83 +152,13 @@ void pulseOutServo(bool dir,int delayMicro){
   delayMicroseconds(delayMicro);
 }
 
-void setup() {
-  
-  pinMode(DIRSTEP, OUTPUT);
-  pinMode(PULSTEP, OUTPUT);
-  pinMode(PULSERVO, OUTPUT);
-  pinMode(DIRSERVO, OUTPUT);
-  pinMode(ENASERVO, OUTPUT);
-  pinMode(HOME, INPUT);
-  pinMode(BUTTON, INPUT);
-
-  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
-  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
-  for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
+void rotateServo(){
+  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
 }
 
-
-
-
-void loop()
-{
-  int reading = digitalRead(BUTTON);
-  if (reading != lastButtonState) lastDebounceTime = millis();
-
-  if ((unsigned long)(millis() - lastDebounceTime) > debounceDelay) { //IF debounceDelay has passed
-    //if (reading != buttonState) {
-    //  buttonState = reading;
-    // if (buttonState == HIGH) {
-        { //FIXME: set layer to 34
-          for (int layer = 0; layer < 2; layer++) //layers number = (34x4)
-          {
-            //RIGHT
-            {
-              for (int g = 444; g > 8; g--) { //layer length
-
-                if(layer == 0){ //SMOOOTH ACCELLERATION
-                  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo*int(g / 8));//1 turn revolutionTime = delayServo * 2 * servoRotation * (g / 8)
-                  for (int i = 0; i < 5; i++) pulseOutStep(LOW, delayStep*int(g/8)); //0.026 mm
-                }
-
-                else{   
-                  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
-                  for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
-                }
-              }
-            }
-            //LEFT
-            {
-              for (int i = 0; i < 436; i++) {
-                  for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
-                  for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
-              }
-            }
-            //RIGHT
-            {
-              for (int i = 0; i < 436; i++) {
-                for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
-                for (int i = 0; i < 5; i++) pulseOutStep(LOW,delayStep); //0.026 mm
-              }
-            }
-            //LEFT + 1 TURN
-            {
-              for (int i = 0; i < 437; i++) {
-                for (int i = 0; i < servoRotation; i++) pulseOutServo(LOW,delayServo);
-                for (int i = 0; i < 5; i++) pulseOutStep(HIGH,delayStep); //0.026 mm
-              }
-            }
-          }
-        }
-
-      //}
-
-      
+void starterPosition(){
   while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
-  for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
-  for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
-
-
+      for (int i = 0; i < coilStarterPosition; i++) pulseOutStep(LOW,1000); // starter position for the coil
+      for (int i = 0; i < servoRotation; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
     }
-  lastButtonState = reading;
 }
