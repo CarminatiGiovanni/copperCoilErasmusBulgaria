@@ -15,15 +15,16 @@ String request;
 //#import <string.h>
 
 void setup() {
-  Serial.begin(115200);
+  //Serial.begin(115200);
   Serial.setTimeout(1);
+  Serial.begin(115200);
 }
 
 void loop() {
   if(Serial.available()){
     request = Serial.readString();
     if(request == "consts")sendInformation();
-    else Serial.print("No action for this request");
+    else Serial.println("No action for this request");
   }
 }
 
@@ -39,7 +40,7 @@ void sendInformation(){
 ",\"SERVO_ROTATION\":" + String(SERVO_ROTATION)+
 ",\"LAYER_TURNS\":" + String(LAYER_TURNS)+
 ",\"COIL_LAYERS\":" + String(COIL_LAYERS) + "}";
-  Serial.print(info);
+  Serial.println(info);
 }
 
 

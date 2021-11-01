@@ -3,17 +3,19 @@ import serial
 import json
 
 PORT = 'COM5'
+BAUDRATE = 115200
 arduinoConsts = {}
-arduino = serial.Serial(port=PORT, baudrate=115200, timeout=.1)
+arduino = serial.Serial(port=PORT,baudrate=BAUDRATE,timeout=.1)
 def write_read(x):
+    #print(x)
     arduino.write(bytes(x, 'utf-8'))
     data = arduino.readline().decode()
-    #print((data))
+    #print('doone')
     if x == 'consts':
         try:
             data = json.loads(data)
         except:
-            print('erroor in json')
+            return write_read('consts') #try again
     return data
 
 while write_read('test') == '':
@@ -22,5 +24,4 @@ while write_read('test') == '':
 while True:
     if arduinoConsts == {}:
         arduinoConsts = write_read('consts')
-        print(str(arduinoConsts))
-        ##print(f"value: {value}",end='\n')
+        print(arduinoConsts)
