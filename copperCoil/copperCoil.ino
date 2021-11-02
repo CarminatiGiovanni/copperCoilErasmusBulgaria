@@ -20,7 +20,7 @@ void setup() {
   pinMode(HOME, INPUT);
   pinMode(BUTTON, INPUT);
 
-  //starterPosition();  //more details in functions.h
+  starterPosition();  //more details in functions.h
 }
 
 void loop()

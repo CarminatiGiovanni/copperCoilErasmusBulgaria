@@ -3,10 +3,10 @@
 // speed modifier calculator
 int calculateTheSpeedModifier(int layer,int turn){
   int speedModifier = 1; // speed modifier = 1 doesn't effect the speed
-  if(layer == 0){ // the only time an acceleration is needed is on the first layer
-    speedModifier = int((LAYER_TURNS - turn) / GRADUAL_ACCELERATION_INDEX); // calculate the speedModifier
-    if(speedModifier == 0) speedModifier = 1; // when the (LAYER_TURNS - turn) < G_A_I speedModifier is set to 0, this if statement fix it
-  } else speedModifier = 1; // if is not the first layer
+  if(layer == 0) speedModifier = int((LAYER_TURNS - turn) / GRADUAL_INDEX); // layer == 0 -> acceleration
+  else if (layer == COIL_LAYERS - 1)speedModifier = int((turn) / GRADUAL_INDEX); // last layer -> deceleration
+  else speedModifier = 1; // if is not the first or the last layer
+  if(speedModifier == 0) speedModifier = 1; // when the [(LAYER_TURNS - turn) < G_A_I speedModifier || turn < G_A_I] is set to 0, this if statement fix it
   return speedModifier;
 }
 
