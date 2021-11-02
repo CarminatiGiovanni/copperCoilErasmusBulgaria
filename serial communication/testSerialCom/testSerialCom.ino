@@ -29,8 +29,7 @@ void loop() {
 }
 
 void sendInformation(){
-  String info = 
-  
+  String info =   
 "{\"SERVO_DELAY\":" + String(SERVO_DELAY) +
 ",\"STEPPER_DELAY\":" + String(STEPPER_DELAY)+
 ",\"STEPPER_HORIZONTAL_MOVE\":" + String(STEPPER_HORIZONTAL_MOVE) +

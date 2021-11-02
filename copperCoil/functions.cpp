@@ -16,3 +16,18 @@ void starterPosition(){
   for (int i = 0; i < COIL_STARTER_POSITION; i++) pulseOutStep(LOW,1000); // starter position for the coil
   for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
 }
+
+// it prints on console the constants as json string
+void sendInformation(){
+  String info =   
+"{\"SERVO_DELAY\":" + String(SERVO_DELAY) +
+",\"STEPPER_DELAY\":" + String(STEPPER_DELAY)+
+",\"STEPPER_HORIZONTAL_MOVE\":" + String(STEPPER_HORIZONTAL_MOVE) +
+",\"GRADUAL_ACCELERATION_INDEX\":" + String(GRADUAL_ACCELERATION_INDEX)+
+",\"DEBOUNCE_DELAY\":" + String(DEBOUNCE_DELAY)+
+",\"COIL_STARTER_POSITION\":" + String(COIL_STARTER_POSITION)+
+",\"SERVO_ROTATION\":" + String(SERVO_ROTATION)+
+",\"LAYER_TURNS\":" + String(LAYER_TURNS)+
+",\"COIL_LAYERS\":" + String(COIL_LAYERS) + "}";
+  Serial.println(info);
+}

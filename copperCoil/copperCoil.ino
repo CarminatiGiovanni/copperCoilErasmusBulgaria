@@ -5,8 +5,12 @@ bool reading = LOW; // read the value of the button
 unsigned long lastDebounceTime = 0; // last time the button has been pressed
 bool LR = LOW; //  stepper motor direction,  HIGH = right | LOW = left
 unsigned long timeNow = 0; //used for the millis
+String request;
 
 void setup() {
+
+  Serial.begin(115200); // begin the serial communication
+  Serial.setTimeout(1); // set a timeout on the communication port
   
   pinMode(DIRSTEP, OUTPUT);
   pinMode(PULSTEP, OUTPUT);
@@ -21,9 +25,17 @@ void setup() {
 
 void loop()
 {
+
+
+  if(Serial.available()){ // if data is written on serial
+    request = Serial.readString(); // read as a string
+    if(request == "consts")sendInformation(); // the request code "consts" send to the serial all the values of the consts of arduino
+    else Serial.println("No action for this request"); // handle other requests
+  }
+  
   reading = digitalRead(BUTTON);  // read the button to start
   if (reading != lastButtonState) lastDebounceTime = millis(); // if the button change state the lastDebounceTime is resetted
-  timeNow = millis();
+  timeNow = millis(); // get the current time
 
   //18446744073709551615 is the maximum number for unsigned long, then millis() restart from 0
   //FIXME: the autonomy of the program is about 50days, then it gets stuck without restarting
@@ -43,5 +55,5 @@ void loop()
     }
      starterPosition(); // after the cicle of the coil, the motors moves to the starter position
   }
-  lastButtonState = reading;
+  lastButtonState = reading; // update the last button state
 }

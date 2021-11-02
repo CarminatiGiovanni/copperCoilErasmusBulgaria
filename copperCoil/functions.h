@@ -26,4 +26,9 @@
     ***********************************************************/ 
     void starterPosition();
 
+    /******* sendInformation *********************************
+     * prints on serial the constants values as JSON string
+    ***********************************************************/ 
+    void sendInformation();
+
 #endif
