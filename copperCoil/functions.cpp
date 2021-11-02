@@ -12,7 +12,8 @@ void moveStepper(bool dir,int delays){ // dir -> LEFT or RIGHT move, delays -> d
 
 // this function bring back the motors to the starter position
 void starterPosition(){
-  while(digitalRead(HOME) == LOW) pulseOutStep(HIGH,1000); // move the stepper back to point 0
+  int n = 0; // if the machine is not connect to the power, after 30000 steps back the program will start
+  while(digitalRead(HOME) == LOW && n < 30000) {pulseOutStep(HIGH,1000);n++;} // move the stepper back to point 0
   for (int i = 0; i < COIL_STARTER_POSITION; i++) pulseOutStep(LOW,1000); // starter position for the coil
   for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(HIGH,1000); // 1 rotation of bottom servo
 }

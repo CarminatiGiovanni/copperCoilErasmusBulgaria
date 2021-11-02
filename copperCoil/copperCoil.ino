@@ -20,12 +20,11 @@ void setup() {
   pinMode(HOME, INPUT);
   pinMode(BUTTON, INPUT);
 
-  starterPosition();  //more details in functions.h
+  //starterPosition();  //more details in functions.h
 }
 
 void loop()
 {
-
 
   if(Serial.available()){ // if data is written on serial
     request = Serial.readString(); // read as a string
@@ -40,7 +39,7 @@ void loop()
   //18446744073709551615 is the maximum number for unsigned long, then millis() restart from 0
   //FIXME: the autonomy of the program is about 50days, then it gets stuck without restarting
 
-  if (timeNow - lastDebounceTime > DEBOUNCE_DELAY) { //IF DEBOUNCE_DELAY has passed
+  if (timeNow - lastDebounceTime > DEBOUNCE_DELAY && reading == HIGH) { //IF DEBOUNCE_DELAY has passed
     LR = LOW; //first go on right
     int speedModifier = 1;  // increment index of the delay of the speed
     int layerTurnsModifier = 0; // index to increment the turns for a layer of the coil
