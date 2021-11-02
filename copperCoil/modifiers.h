@@ -5,7 +5,7 @@
 
 
 /************* calculateTheSpeedModifier ***********************
- * speed mofifier is the value that gradually increase the speed of the servo motor
+ * speed mofifier is the value that gradually increase or decrease the speed of the servo motor
  * ARGS:
  *  layer -> only when on the first layer the acceleration is needed
  *  turn -> index needed for the gradual acceleration
