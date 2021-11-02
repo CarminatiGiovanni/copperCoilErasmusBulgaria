@@ -88,3 +88,30 @@ Setup is the function that arduino call when turns on.
 -----------------
 <br><br>
 ## SERIAL COMMUNICATION between python and arduino
+
+arduino provides a connection with the serial port to communicate with a computer,
+that permits to the computer get the constants and the values from the arduino board writing requests as byte strings on the port and waiting for a response printed in the serial by arduino.
+
+The python library that creates this communication is *[pyserial](https://pypi.org/project/pyserial/)*; it's free and to install it is just needed *PIP* installed. For the installation just type *pip install pyserial* in the terminal.
+
+The program we created is used to ask to arduino about the constants contained in *GLOBALS.h*, arduino will send on the serial the globals as a *JSON* object that python will parse in a *Dictionary* structure.
+
+
+### **pseudocode:**
+
+ 1. import pyserial and json libraries
+ 2. define variables (port baudrate and the *empty Dictionary*)
+ 3. define ARDUINO CONNECTION
+ 4. define *write_read(request)* function that send a request to the serial and returns the answer
+ 5. wait for arduino response on the port with random requests
+ 6. starts infinite loop:
+    1. if consts of arduino are not already taken, call *write_read('consts')* and print them out on console
+
+### __about *write_read(request)*__
+
+this functions makes requests to the arduino board, 'till now arduino only response with json string of consts only when the request is *'consts'*, else just return an error string
+
+arduino only comunicate with *bytes* strings, so is needed a casting from *utf-8 -> bytes* for sending the request. The response is decoded using the attribute *.decode()*
+
+As I said if the request is *'consts'* a response as JSON string is expected, with *json.loads()* function the string is parsed to a dictioary, else is thrown an error and the function recalled again
+ 
