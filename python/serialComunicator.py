@@ -19,7 +19,7 @@ def write_read(request): # write on arduino a request and read the answer
 while write_read('test') == '': # because when the serial communication starts the first messages are confused this just makes call until the response is not null
     pass
 
-while True: # infinite loop, to stop the program kill the process or use ctrl + c in terminal
-    if arduinoConsts == {}: # if no consts are loaded
-        arduinoConsts = write_read('consts') # ask for the consts
-        print(arduinoConsts) # print on console the consts
+#while True: # infinite loop, to stop the program kill the process or use ctrl + c in terminal
+if arduinoConsts == {}: # if no consts are loaded
+    arduinoConsts = write_read('consts') # ask for the consts
+    print(arduinoConsts) # print on console the constst

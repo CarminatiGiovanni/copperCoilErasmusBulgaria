@@ -4,7 +4,7 @@
 const int SERVO_DELAY = 9; // fixed servo delay
 const int STEPPER_DELAY = 50;   // fixed stepper delay
 const int STEPPER_HORIZONTAL_MOVE = 5; // horizontal move for the stepper (0.026mm)
-const int GRADUAL_INDEX = 64; // this index affect the acceleration and deceleration of the servo motor
+const int GRADUAL_INDEX = 16; // this index affect the acceleration and deceleration of the servo motor
 const unsigned long DEBOUNCE_DELAY = 30; // delay for pressing the starter button
 const int COIL_STARTER_POSITION = 1530;  // pos 0 of the coil
 const int SERVO_ROTATION = 400; // 360° servo rotation
