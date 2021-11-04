@@ -52,7 +52,7 @@ void loop()
       }
       LR = !LR; // invert the direction of the stepper
     }
-     starterPosition(); // after the cicle of the coil, the motors moves to the starter position
+    starterPosition(); // after the cicle of the coil, the motors moves to the starter position
   }
   lastButtonState = reading; // update the last button state
 }
