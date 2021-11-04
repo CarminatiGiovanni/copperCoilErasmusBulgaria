@@ -2,6 +2,7 @@
 
 bool lastButtonState = LOW; //old button state
 bool reading = LOW; // read the value of the button
+bool start = false; // to start from serial call
 unsigned long lastDebounceTime = 0; // last time the button has been pressed
 bool LR = LOW; //  stepper motor direction,  HIGH = right | LOW = left
 unsigned long timeNow = 0; //used for the millis
@@ -29,6 +30,7 @@ void loop()
   if(Serial.available()){ // if data is written on serial
     request = Serial.readString(); // read as a string
     if(request == "consts")sendInformation(); // the request code "consts" send to the serial all the values of the consts of arduino
+    else if(request == "start") start = true;
     else Serial.println("No action for this request"); // handle other requests
   }
   
@@ -39,7 +41,8 @@ void loop()
   //18446744073709551615 is the maximum number for unsigned long, then millis() restart from 0
   //FIXME: the autonomy of the program is about 50days, then it gets stuck without restarting
 
-  if (timeNow - lastDebounceTime > DEBOUNCE_DELAY && reading == HIGH) { //IF DEBOUNCE_DELAY has passed
+  if ((timeNow - lastDebounceTime > DEBOUNCE_DELAY && reading == HIGH) || start) { //IF DEBOUNCE_DELAY has passed
+    start = false;
     LR = LOW; //first go on right
     int speedModifier = 1;  // increment index of the delay of the speed
     int layerTurnsModifier = 0; // index to increment the turns for a layer of the coil
