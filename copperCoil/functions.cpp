@@ -2,7 +2,7 @@
 
 // this function rotate the coil of 360°
 void rotateServo(int delays){ // 1st argument is the delay of the rotation
-  for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(LOW,delays); // a 360° rotation is made by SERVO_ROTATION pulseOut
+  for (int i = 0; i < SERVO_ROTATION; i++) pulseOutServo(HIGH,delays); // a 360° rotation is made by SERVO_ROTATION pulseOut LOW = clockwise | HIGH counterclockwise
 }
 
 // this function moves horizontally the stepper for the width of the copper wire 
