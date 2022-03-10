@@ -1,4 +1,4 @@
-# **copperCoilErasmusBulgary**
+# **copperCoilErasmusBulgaria**
 
 This is the first program I made with @Dario-Rota during the ERASMUS in LMP industry (Plovdiv, Bulgary).
 
